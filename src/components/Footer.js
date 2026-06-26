@@ -22,9 +22,9 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="flex items-center gap-6 text-sm font-medium text-slate-400">
             <Link href="/" className="hover:text-sky-500 transition-colors">Home</Link>
-            <Link href="/?view=movies" className="hover:text-sky-500 transition-colors">Movies</Link>
-            <Link href="/?view=singers" className="hover:text-sky-500 transition-colors">Singers</Link>
-            <Link href="/?view=lyricists" className="hover:text-sky-500 transition-colors">Lyricists</Link>
+            <Link href="/movies" className="hover:text-sky-500 transition-colors">Movies</Link>
+            <Link href="/singers" className="hover:text-sky-500 transition-colors">Singers</Link>
+            <Link href="/lyricists" className="hover:text-sky-500 transition-colors">Lyricists</Link>
           </div>
         </div>
 

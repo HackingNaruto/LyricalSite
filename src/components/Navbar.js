@@ -6,9 +6,9 @@ import { Music, Menu, X, Home, Film, Mic, PenTool } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/?view=movies", label: "Movies A-Z", icon: Film },
-  { href: "/?view=singers", label: "Singers", icon: Mic },
-  { href: "/?view=lyricists", label: "Lyricists", icon: PenTool },
+  { href: "/movies", label: "Movies A-Z", icon: Film },
+  { href: "/singers", label: "Singers", icon: Mic },
+  { href: "/lyricists", label: "Lyricists", icon: PenTool },
 ];
 
 export default function Navbar() {
@@ -38,7 +38,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => {
               const Icon = link.icon;
-              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               return (
                 <Link
                   key={link.label}

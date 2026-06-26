@@ -1,6 +1,7 @@
 "use client";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   Search,
   Music,
@@ -26,7 +27,9 @@ const SORT_OPTIONS = [
 const BATCH_SIZE = 24;
 
 export default function Home() {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") || "";
+  const [search, setSearch] = useState(urlSearch);
   const [sortBy, setSortBy] = useState("default");
   const [sortOpen, setSortOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
@@ -34,6 +37,14 @@ export default function Home() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef(null);
   const sortRef = useRef(null);
+
+  // Sync URL search param with state
+  useEffect(() => {
+    if (urlSearch) {
+      setSearch(urlSearch);
+      setVisibleCount(BATCH_SIZE);
+    }
+  }, [urlSearch]);
 
   // Stats
   const totalSongs = songsData.length;
@@ -59,7 +70,9 @@ export default function Home() {
         (song) =>
           song.title.toLowerCase().includes(q) ||
           song.movie.toLowerCase().includes(q) ||
-          song.singers.toLowerCase().includes(q)
+          song.singers.toLowerCase().includes(q) ||
+          (song.lyricist && song.lyricist.toLowerCase().includes(q)) ||
+          (song.music && song.music.toLowerCase().includes(q))
       );
   }, [search]);
 
@@ -146,6 +159,7 @@ export default function Home() {
             <input
               ref={searchRef}
               type="text"
+              value={search}
               placeholder="Search by song, movie, or singer..."
               className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border border-slate-200 text-slate-800 placeholder-slate-400 text-base font-medium outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100 shadow-sm hover:shadow-md transition-all duration-300"
               onChange={(e) => {
