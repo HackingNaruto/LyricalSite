@@ -1,7 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
+const config = {
+  // Ensure we aren't forcing experimental features that might break
 };
 
-export default nextConfig;
+export default config;
