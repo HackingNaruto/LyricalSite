@@ -25,13 +25,17 @@ export default function SingersPage() {
     const map = {};
     songsData.forEach((song, index) => {
       if (!song.singers || song.singers === "Unknown") return;
-      const singers = song.singers.split(",").map((s) => s.trim());
+      // Split by comma, ampersand, or the word 'and'
+      const singers = song.singers.split(/[,&]|\band\b/i).map((s) => s.trim()).filter(Boolean);
       singers.forEach((singer) => {
-        if (!singer || singer === "Unknown") return;
-        if (!map[singer]) {
-          map[singer] = { name: singer, songs: [] };
+        // Clean up any stray "Music by :" or other metadata that slipped through
+        let cleanName = singer.replace(/^(Music by\s*:|Singer\s*:|Lyrics\s*:)\s*/i, '').trim();
+        if (!cleanName || cleanName === "Unknown") return;
+        
+        if (!map[cleanName]) {
+          map[cleanName] = { name: cleanName, songs: [] };
         }
-        map[singer].songs.push({ ...song, originalIndex: index });
+        map[cleanName].songs.push({ ...song, originalIndex: index });
       });
     });
     return map;

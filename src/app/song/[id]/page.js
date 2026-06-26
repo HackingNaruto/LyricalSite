@@ -88,7 +88,7 @@ export default function SongPage({ params }) {
     if (!song || !song.singers || song.singers === "Unknown") return [];
     const current = song.singers
       .toLowerCase()
-      .split(",")
+      .split(/[,&]|\band\b/i)
       .map((s) => s.trim());
     return songsData
       .map((s, i) => ({ ...s, originalIndex: i }))
@@ -96,7 +96,7 @@ export default function SongPage({ params }) {
         if (s.originalIndex === songId || !s.singers) return false;
         const other = s.singers
           .toLowerCase()
-          .split(",")
+          .split(/[,&]|\band\b/i)
           .map((x) => x.trim());
         return current.some((c) =>
           other.some((o) => o.includes(c) || c.includes(o))
@@ -388,7 +388,7 @@ export default function SongPage({ params }) {
               <div className="h-px flex-1 bg-slate-100" />
               <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-500">
                 <Mic size={14} strokeWidth={2} className="text-sky-400" />
-                More by {song.singers?.split(",")[0]?.trim()}
+                More by {song.singers?.split(/[,&]|\band\b/i)[0]?.trim()}
               </span>
               <div className="h-px flex-1 bg-slate-100" />
             </div>

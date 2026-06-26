@@ -25,12 +25,18 @@ export default function LyricistsPage() {
   const lyricistMap = useMemo(() => {
     const map = {};
     songsData.forEach((song, index) => {
-      const lyricist = song.lyricist?.trim();
-      if (!lyricist || lyricist === "Unknown" || lyricist === "N/A") return;
-      if (!map[lyricist]) {
-        map[lyricist] = { name: lyricist, songs: [] };
-      }
-      map[lyricist].songs.push({ ...song, originalIndex: index });
+      if (!song.lyricist || song.lyricist === "Unknown" || song.lyricist === "N/A") return;
+      
+      const lyricists = song.lyricist.split(/[,&]|\band\b/i).map((l) => l.trim()).filter(Boolean);
+      lyricists.forEach((lyricist) => {
+        let cleanName = lyricist.replace(/^(Lyrics by\s*:|Lyricist\s*:)\s*/i, '').trim();
+        if (!cleanName || cleanName === "Unknown" || cleanName === "N/A") return;
+        
+        if (!map[cleanName]) {
+          map[cleanName] = { name: cleanName, songs: [] };
+        }
+        map[cleanName].songs.push({ ...song, originalIndex: index });
+      });
     });
     return map;
   }, []);
@@ -303,7 +309,7 @@ export default function LyricistsPage() {
                                       </span>
                                       {song.singers && song.singers !== "Unknown" && (
                                         <span className="flex items-center gap-0.5">
-                                          <Mic size={9} /> {song.singers.split(",")[0].trim()}
+                                          <Mic size={9} /> {song.singers.split(/[,&]|\band\b/i)[0].trim()}
                                         </span>
                                       )}
                                     </p>

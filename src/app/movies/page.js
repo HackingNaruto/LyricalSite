@@ -257,7 +257,7 @@ export default function MoviesPage() {
                                     <p className="text-[11px] text-slate-400 truncate mt-0.5 flex items-center gap-2">
                                       {song.singers && song.singers !== "Unknown" && (
                                         <span className="flex items-center gap-0.5">
-                                          <Mic size={9} /> {song.singers}
+                                          <Mic size={9} /> {song.singers.split(/[,&]|\band\b/i)[0].trim()}
                                         </span>
                                       )}
                                     </p>

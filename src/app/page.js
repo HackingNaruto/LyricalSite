@@ -55,8 +55,15 @@ export default function Home() {
   const uniqueSingers = useMemo(() => {
     const set = new Set();
     songsData.forEach((s) => {
-      if (s.singers)
-        s.singers.split(",").forEach((n) => set.add(n.trim()));
+      if (s.singers && s.singers !== "Unknown") {
+        const singers = s.singers.split(/[,&]|\band\b/i).map((n) => n.trim()).filter(Boolean);
+        singers.forEach((singer) => {
+          let cleanName = singer.replace(/^(Music by\s*:|Singer\s*:|Lyrics\s*:)\s*/i, '').trim();
+          if (cleanName && cleanName !== "Unknown") {
+            set.add(cleanName);
+          }
+        });
+      }
     });
     return set.size;
   }, []);
@@ -282,7 +289,7 @@ export default function Home() {
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-full bg-sky-50 text-sky-600 border border-sky-100">
                       <Mic size={10} strokeWidth={2.5} />
                       <span className="truncate max-w-[100px]">
-                        {song.singers.split(",")[0].trim()}
+                        {song.singers.split(/[,&]|\band\b/i)[0].trim()}
                       </span>
                     </span>
                   )}
